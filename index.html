@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Linklette</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+    :root {
+      --light-bg: linear-gradient(135deg, #d8b4f8, #fbcfe8, #ffffff);
+      --light-text: #4b006e;
+      --light-box: rgba(255,255,255,0.9);
+
+      --dark-bg: #0a0c14;
+      --dark-text: #e0e0ff;
+      --dark-box: rgba(20,22,35,0.85);
+
+      --accent1: #a855f7;
+      --accent2: #ec4899;
+      --neon: #7df9ff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--light-bg);
+      background-size: 600% 600%;
+      animation: gradientShift 20s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: background 0.6s ease, color 0.6s ease;
+      color: var(--light-text);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    @keyframes gradientShift {
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
+    }
+
+    body.dark {
+      background: var(--dark-bg);
+      animation: none;
+      color: var(--dark-text);
+    }
+
+    /* Background floating blobs container */
+    .bg-shapes {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 0;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.3;
+      filter: blur(60px);
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      mix-blend-mode: screen;
+    }
+
+    /* Different blobs with different sizes, colors, and animations */
+    .blob1 {
+      width: 250px;
+      height: 250px;
+      background: #a855f7;
+      top: 10%;
+      left: 15%;
+      animation-name: move1, colorShift;
+      animation-duration: 6s, 20s;
+    }
+
+    .blob2 {
+      width: 180px;
+      height: 180px;
+      background: #ec4899;
+      top: 60%;
+      left: 70%;
+      animation-name: move2, colorShift;
+      animation-duration: 8s, 25s;
+      animation-delay: 0s, 10s;
+    }
+
+    .blob3 {
+      width: 300px;
+      height: 300px;
+      background: #7df9ff;
+      top: 40%;
+      left: 40%;
+      animation-name: move3, colorShift;
+      animation-duration: 7s, 22s;
+      animation-delay: 2s, 5s;
+    }
+
+    /* New blobs added */
+    .blob4 {
+      width: 150px;
+      height: 150px;
+      background: #ff6fcf;
+      top: 25%;
+      left: 80%;
+      animation-name: move4, colorShift;
+      animation-duration: 9s, 30s;
+      animation-delay: 1s, 12s;
+    }
+
+    .blob5 {
+      width: 200px;
+      height: 200px;
+      background: #5af9ff;
+      top: 75%;
+      left: 25%;
+      animation-name: move5, colorShift;
+      animation-duration: 6.5s, 18s;
+      animation-delay: 3s, 7s;
+    }
+
+    .blob6 {
+      width: 100px;
+      height: 100px;
+      background: #ffa3a3;
+      top: 50%;
+      left: 10%;
+      animation-name: move6, colorShift;
+      animation-duration: 8s, 20s;
+      animation-delay: 0s, 15s;
+    }
+
+    @keyframes move1 {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(30px, -20px); }
+    }
+
+    @keyframes move2 {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-25px, 25px); }
+    }
+
+    @keyframes move3 {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(20px, 30px); }
+    }
+
+    /* Animations for new blobs */
+    @keyframes move4 {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-20px, 15px); }
+    }
+
+    @keyframes move5 {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(25px, -25px); }
+    }
+
+    @keyframes move6 {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-15px, -20px); }
+    }
+
+    @keyframes colorShift {
+      0%, 100% {
+        filter: hue-rotate(0deg);
+        opacity: 0.3;
+      }
+      50% {
+        filter: hue-rotate(45deg);
+        opacity: 0.25;
+      }
+    }
+
+    /* Center input horizontally */
+    input[type="text"] {
+      width: 90%;
+      margin: 10px auto 0 auto;
+      display: block;
+      padding: 1rem 1.2rem;
+      border-radius: 15px;
+      border: 2px solid var(--accent1);
+      font-size: 1.1rem;
+      outline: none;
+      background: #fdf4ff;
+      color: var(--light-text);
+      box-shadow: inset 3px 3px 8px #f3e8ff;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent1);
+      box-shadow: 0 0 10px var(--accent1);
+    }
+
+    body.dark input[type="text"] {
+      background: #151826;
+      color: var(--dark-text);
+      border-color: var(--neon);
+      box-shadow: inset 2px 2px 6px #000;
+    }
+
+    body.dark input[type="text"]:focus {
+      box-shadow: 0 0 12px var(--neon);
+    }
+
+    .container {
+      background: var(--light-box);
+      border-radius: 25px;
+      padding: 3rem 2.5rem;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: 
+        background 0.6s ease, 
+        box-shadow 0.4s ease,
+        transform 0.3s ease;
+      position: relative;
+      z-index: 10;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    body.dark .container {
+      background: var(--dark-box);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.7);
+    }
+
+    h1 {
+      margin-bottom: 2rem;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: var(--accent1);
+      user-select: none;
+      text-shadow: 0 2px 5px #e9d5ff88;
+      transition: color 0.6s ease;
+    }
+
+    body.dark h1 {
+      color: var(--neon);
+      text-shadow: 0 0 8px var(--neon);
+    }
+
+    button {
+      margin-top: 1.6rem;
+      width: 100%;
+      padding: 1rem 0;
+      background: linear-gradient(45deg, var(--accent2), var(--accent1));
+      border: none;
+      border-radius: 25px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--light-text);
+      cursor: pointer;
+      box-shadow: 0 6px 18px #e9d5ff66;
+      transition: all 0.3s ease, transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 28px #e9d5ff99;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    body.dark button {
+      background: var(--neon);
+      color: #0a0c14;
+      box-shadow: 0 6px 18px var(--neon);
+    }
+
+    #result {
+      margin-top: 2rem;
+      background: #f3e8ff;
+      border-radius: 20px;
+      padding: 1rem 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      word-break: break-word;
+      box-shadow: inset 3px 3px 10px #e9d5ff;
+      transition: all 0.6s ease;
+    }
+
+    body.dark #result {
+      background: rgba(20,22,35,0.9);
+      color: var(--dark-text);
+      box-shadow: inset 2px 2px 8px #000;
+    }
+
+    #result a {
+      color: var(--accent1);
+      flex-grow: 1;
+      margin-right: 15px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    body.dark #result a {
+      color: var(--neon);
+      text-shadow: 0 0 6px var(--neon);
+    }
+
+    #result a:hover {
+      text-decoration: underline;
+    }
+
+    #copy-btn {
+      background: var(--accent1);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--accent1);
+      transition: background 0.3s ease, transform 0.15s ease;
+    }
+
+    body.dark #copy-btn {
+      background: var(--neon);
+      color: #0a0c14;
+    }
+
+    #copy-btn:hover {
+      transform: scale(1.1);
+    }
+
+    #copy-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Toggle Button (bottom-right circle) */
+    #toggle {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: var(--accent1);
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 5px 15px var(--accent1);
+      transition: background 0.3s ease, transform 0.2s ease;
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 1;
+      padding: 0;
+    }
+
+    body.dark #toggle {
+      background: var(--neon);
+      color: #0a0c14;
+      box-shadow: 0 5px 15px var(--neon);
+    }
+
+    #toggle:hover {
+      transform: scale(1.1);
+    }
+
+    /* Footer styles */
+    footer {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      color: var(--light-text);
+      font-size: 0.9rem;
+      z-index: 20;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+    }
+
+    footer:hover {
+      opacity: 1;
+    }
+
+    body.dark footer {
+      color: var(--dark-text);
+    }
+
+    @media (max-width: 450px) {
+      .container {
+        padding: 2rem 1.5rem;
+      }
+      h1 {
+        font-size: 2.2rem;
+      }
+      footer {
+        font-size: 0.8rem;
+        bottom: 15px;
+        left: 15px;
+      }
+    }
+
+    /* Spinner styles for "shortening" */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid transparent;
+      border-top: 3px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+
+    body.dark .spinner {
+      border-top-color: #0a0c14;
+      border: 3px solid transparent;
+      border-top: 3px solid var(--dark-bg);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Canvas layers for snow and stars */
+    canvas#snow-canvas,
+    canvas#stars-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-shapes" aria-hidden="true">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+    <div class="blob blob4"></div>
+    <div class="blob blob5"></div>
+    <div class="blob blob6"></div>
+  </div>
+
+  <main class="container" role="main" aria-label="URL shortener">
+    <h1>Linklette</h1>
+    <input
+      id="inputURL"
+      type="text"
+      placeholder="Paste your URL here"
+      aria-label="URL input"
+    />
+    <button id="shorten-btn" aria-live="polite" aria-busy="false">Shorten URL</button>
+    <div id="result" aria-live="polite" hidden>
+      <a href="#" target="_blank" rel="noopener noreferrer" id="shortened-link">Shortened Link</a>
+      <button id="copy-btn" aria-label="Copy shortened URL">Copy</button>
+    </div>
+  </main>
+
+  <button id="toggle" aria-pressed="false" aria-label="Toggle dark/light mode" title="Toggle dark/light mode">
+    ☀️
+  </button>
+
+  <footer>
+    &copy; 2025 Kritika. All rights reserved.
+  </footer>
+
+  <!-- Canvases for effects -->
+  <canvas id="snow-canvas"></canvas>
+  <canvas id="stars-canvas"></canvas>
+
+  <script>
+    const body = document.body;
+    const toggleBtn = document.getElementById('toggle');
+    const inputURL = document.getElementById('inputURL');
+    const shortenBtn = document.getElementById('shorten-btn');
+    const result = document.getElementById('result');
+    const shortenedLink = document.getElementById('shortened-link');
+    const copyBtn = document.getElementById('copy-btn');
+
+    // In-memory storage for URL mappings
+    const urlDatabase = {};
+
+    // Generate a random 2-character alphanumeric code
+    function generateShortCode() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let code = '';
+      
+      // Keep generating until we get a unique code
+      do {
+        code = '';
+        for (let i = 0; i < 2; i++) {
+          code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+      } while (urlDatabase[code]);
+      
+      return code;
+    }
+
+    // Check if we're returning from a redirected page
+    function checkForRedirect() {
+      const params = new URLSearchParams(window.location.search);
+      const returnParam = params.get('return');
+      
+      if (returnParam === 'true') {
+        // Show back button and hide main UI
+        backBtn.style.display = 'flex';
+        document.querySelector('.container').style.display = 'none';
+        
+        // Restore dark mode if it was enabled
+        if (sessionStorage.getItem('darkMode')) {
+          body.classList.add('dark');
+          toggleBtn.textContent = '🌙';
+          toggleBtn.setAttribute('aria-pressed', 'true');
+          updateCanvasVisibility();
+        }
+      }
+    }
+
+    // Toggle dark mode and icon
+    toggleBtn.addEventListener('click', () => {
+      const isDark = body.classList.toggle('dark');
+      toggleBtn.setAttribute('aria-pressed', isDark);
+      toggleBtn.textContent = isDark ? '🌙' : '☀️';
+      
+      // Store preference
+      sessionStorage.setItem('darkMode', isDark);
+      
+      updateCanvasVisibility();
+    });
+
+    function updateCanvasVisibility() {
+      if (body.classList.contains('dark')) {
+        snowCanvas.style.display = 'none';
+        starsCanvas.style.display = 'block';
+      } else {
+        snowCanvas.style.display = 'block';
+        starsCanvas.style.display = 'none';
+      }
+    }
+
+    // Shorten URL functionality
+    shortenBtn.addEventListener('click', () => {
+      const url = inputURL.value.trim();
+
+      if (!url) {
+        alert('Please enter a valid URL.');
+        return;
+      }
+
+      // Basic URL validation
+      try {
+        new URL(url);
+      } catch {
+        alert('Please enter a valid URL.');
+        return;
+      }
+
+      shortenBtn.disabled = true;
+      shortenBtn.setAttribute('aria-busy', 'true');
+      shortenBtn.textContent = 'Shortening... ';
+
+      // Show spinner
+      const spinner = document.createElement('span');
+      spinner.className = 'spinner';
+      shortenBtn.appendChild(spinner);
+
+      // Simulate async call
+      setTimeout(() => {
+        shortenBtn.disabled = false;
+        shortenBtn.setAttribute('aria-busy', 'false');
+        shortenBtn.textContent = 'Shorten URL';
+
+        // Generate a 2-character short code
+        const shortCode = generateShortCode();
+        
+        // Store the mapping
+        urlDatabase[shortCode] = url;
+        
+        // Display the shortened URL
+        const shortUrl = `https://lnk.lt/${shortCode}`;
+        shortenedLink.href = url;
+        shortenedLink.textContent = shortUrl;
+        shortenedLink.dataset.original = url;
+        result.hidden = false;
+
+        // Store in sessionStorage for return functionality
+        sessionStorage.setItem('originalURL', url);
+        sessionStorage.setItem('shortenedURL', shortUrl);
+
+        // Focus the shortened link for accessibility
+        shortenedLink.focus();
+      }, 1500);
+    });
+
+    // Copy button functionality
+    copyBtn.addEventListener('click', () => {
+      const text = shortenedLink.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy';
+        }, 2000);
+      }).catch(() => {
+        alert('Failed to copy');
+      });
+    });
+
+    // Modified shortened link click handler
+    shortenedLink.addEventListener('click', (e) => {
+      if (!window.location.search.includes('return=true')) {
+        e.preventDefault();
+        
+        // Open with return parameter
+        window.open(shortenedLink.href + '?return=true', '_blank');
+      }
+    });
+
+    // Initialize dark mode if previously set
+    if (sessionStorage.getItem('darkMode') === 'true') {
+      body.classList.add('dark');
+      toggleBtn.textContent = '🌙';
+      toggleBtn.setAttribute('aria-pressed', 'true');
+    }
+
+    // Check for redirect on page load
+    checkForRedirect();
+
+    // --- Canvas for snowflakes (light mode) ---
+    const snowCanvas = document.getElementById('snow-canvas');
+    const snowCtx = snowCanvas.getContext('2d');
+    let snowflakes = [];
+
+    function resizeSnow() {
+      snowCanvas.width = window.innerWidth;
+      snowCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeSnow);
+    resizeSnow();
+
+    class Snowflake {
+      constructor() {
+        this.x = Math.random() * snowCanvas.width;
+        this.y = Math.random() * snowCanvas.height;
+        this.radius = Math.random() * 3 + 1;
+        this.speed = Math.random() * 1 + 0.5;
+        this.angle = Math.random() * Math.PI * 2;
+        this.size = this.radius;
+      }
+      update() {
+        this.y += this.speed;
+        this.x += Math.sin(this.angle) * 0.5;
+        this.angle += 0.01;
+
+        if (this.y > snowCanvas.height) {
+          this.y = -this.radius;
+          this.x = Math.random() * snowCanvas.width;
+        }
+      }
+      draw() {
+        snowCtx.beginPath();
+        snowCtx.fillStyle = 'rgba(255,255,255,0.8)';
+        snowCtx.shadowColor = 'white';
+        snowCtx.shadowBlur = 4;
+        snowCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        snowCtx.fill();
+      }
+    }
+
+    function initSnowflakes() {
+      snowflakes = [];
+      for (let i = 0; i < 150; i++) {
+        snowflakes.push(new Snowflake());
+      }
+    }
+    initSnowflakes();
+
+    function animateSnow() {
+      snowCtx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
+      snowflakes.forEach(flake => {
+        flake.update();
+        flake.draw();
+      });
+      requestAnimationFrame(animateSnow);
+    }
+
+    // --- Canvas for glowing stars (dark mode) ---
+    const starsCanvas = document.getElementById('stars-canvas');
+    const starsCtx = starsCanvas.getContext('2d');
+    let stars = [];
+
+    function resizeStars() {
+      starsCanvas.width = window.innerWidth;
+      starsCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeStars);
+    resizeStars();
+
+    class Star {
+      constructor() {
+        this.x = Math.random() * starsCanvas.width;
+        this.y = Math.random() * starsCanvas.height;
+        this.radius = Math.random() * 1.5 + 0.3;
+        this.baseRadius = this.radius;
+        this.twinkleSpeed = Math.random() * 0.02 + 0.01;
+        this.opacity = Math.random() * 0.5 + 0.5;
+        this.opacityDirection = Math.random() < 0.5 ? 1 : -1;
+      }
+      update() {
+        this.opacity += this.twinkleSpeed * this.opacityDirection;
+        if (this.opacity > 1) {
+          this.opacity = 1;
+          this.opacityDirection *= -1;
+        }
+        if (this.opacity < 0.4) {
+          this.opacity = 0.4;
+          this.opacityDirection *= -1;
+        }
+      }
+      draw() {
+        starsCtx.beginPath();
+        starsCtx.shadowColor = '#7df9ff';
+        starsCtx.shadowBlur = 12;
+        starsCtx.fillStyle = `rgba(125,249,255,${this.opacity})`;
+        starsCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        starsCtx.fill();
+      }
+    }
+
+    function initStars() {
+      stars = [];
+      for (let i = 0; i < 120; i++) {
+        stars.push(new Star());
+      }
+    }
+    initStars();
+
+    function animateStars() {
+      starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+      stars.forEach(star => {
+        star.update();
+        star.draw();
+      });
+      requestAnimationFrame(animateStars);
+    }
+
+    // Initialize canvas visibility
+    updateCanvasVisibility();
+
+    // Start animations
+    animateSnow();
+    animateStars();
+  </script>
+</body>
+</html>
